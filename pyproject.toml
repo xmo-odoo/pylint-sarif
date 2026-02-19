@@ -1,0 +1,76 @@
+[build-system]
+requires = ["uv_build>=0.9.25,<0.10.0"]
+build-backend = "uv_build"
+
+[project]
+name = "pylint-sarif"
+version = "0.1.0"
+license = "GPL-2.0-only"
+description = "SARIF reporter for PyLint"
+readme = "README.md"
+authors = [
+    { name = "Xavier Morel", email = "xmo@odoo.com" }
+]
+keywords = ["pylint", "plugin", "reporter", "sarif"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Plugins",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Software Development :: Quality Assurance",
+]
+requires-python = ">=3.10"
+dependencies = [
+    "pylint>=3.0,<5",
+]
+
+[dependency-groups]
+dev = [
+    "tox",
+    {include-group = "lint"},
+    {include-group = "typecheck"},
+    {include-group = "test"},
+]
+lint = ["ruff"]
+typecheck = [
+    "mypy",
+    "types-requests",
+    {include-group = "test"}
+]
+test = [
+    "pytest",
+    "requests",
+    "jsonschema",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v"
+
+[tool.ruff]
+target-version = "py310"
+lint = {"select" = ["E", "F", "W", "I", "UP", "B", "RUF"]}
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+warn_unreachable = true
+show_error_codes = true
+exclude = [
+    "^.venv",
+    "^build/",
+    "^dist/",
+]
+
+[[tool.mypy.overrides]]
+module = [
+    "astroid.*",
+    "pylint.*",
+]
+ignore_missing_imports = true
